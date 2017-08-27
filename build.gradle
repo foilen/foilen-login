@@ -1,0 +1,85 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    jcenter()
+  }
+  dependencies {
+    classpath 'io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE'
+  }
+}
+plugins {
+    id 'org.springframework.boot' version '1.5.6.RELEASE'
+}
+
+apply plugin: 'eclipse'
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
+
+group = 'com.foilen'
+version = System.getenv('VERSION')?:'master-SNAPSHOT'
+
+repositories {
+  mavenLocal()
+  jcenter()
+  mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencyManagement {
+  imports {
+    mavenBom 'io.spring.platform:platform-bom:Brussels-SR4'
+  }
+}
+
+eclipse {
+  classpath {
+    downloadSources = true
+    downloadJavadoc = true
+  }
+}
+
+dependencies {
+
+  // Internal API
+  compile "com.foilen:foilen-login-api:$foilenLoginApiVersion"
+
+  // Databases
+  compile "mysql:mysql-connector-java"
+  compile "org.springframework.boot:spring-boot-starter-data-jpa"
+  compile "org.springframework.boot:spring-boot-starter-jdbc"
+  
+	// Emails
+	compile 'com.sun.mail:javax.mail'
+	compile 'javax.activation:activation'
+
+  // Web
+  compile "org.springframework.boot:spring-boot-starter-freemarker"
+  compile "org.springframework.boot:spring-boot-starter-web"
+  compile "org.webjars:bootstrap:3.3.7-1"
+
+  // Networking
+  compile "io.netty:netty-all:$nettyVersion"
+
+  // Spring
+  compile "org.springframework:spring-context"
+  compile 'org.springframework.security:spring-security-web'
+
+  // Misc
+  compile "args4j:args4j:$argsVersion"
+  compile "commons-validator:commons-validator:$commonsValidatorVersion"
+
+  // Test
+  testCompile 'junit:junit'
+  testCompile "com.h2database:h2"
+  testCompile "org.springframework:spring-test"
+  testCompile "org.springframework.boot:spring-boot-starter-test"
+}
+
+springBoot {
+  mainClass = 'com.foilen.login.LoginApp'
+}
+
+task wrapper(type: Wrapper) { gradleVersion = '3.2.1' }

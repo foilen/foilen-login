@@ -1,0 +1,1 @@
+<#macro message code parameters=[]><#if parameters?is_sequence><#if parameters?size == 0>${springMacroRequestContext.getMessage(code)}<#else>${springMacroRequestContext.getMessage(code, parameters)}</#if><#else>${springMacroRequestContext.getMessage(code, [parameters])}</#if></#macro>
