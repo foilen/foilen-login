@@ -126,33 +126,33 @@ cat > /tmp/foilen_config.json << _EOF
 _EOF
 
 # Run mariadb
-	docker run \
+docker run \
   --rm \
-	--name foilen-login_mariadb \
-	--env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASS \
-	--detach \
-	mariadb:10.2.8
+  --name foilen-login_mariadb \
+  --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASS \
+  --detach \
+  mariadb:10.2.8
 
 # Create database and user
 sleep 20s
 docker run -i \
-	--link foilen-login_mariadb:mysql \
-	--rm \
-	mariadb:10.2.8 \
-	sh -c 'exec mysql -h"$MYSQL_PORT_3306_TCP_ADDR" -P"$MYSQL_PORT_3306_TCP_PORT" -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD"' << _EOF
+  --link foilen-login_mariadb:mysql \
+  --rm \
+  mariadb:10.2.8 \
+  sh -c 'exec mysql -h"$MYSQL_PORT_3306_TCP_ADDR" -P"$MYSQL_PORT_3306_TCP_PORT" -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD"' << _EOF
 CREATE DATABASE foilen_login;
 GRANT ALL ON foilen_login.* TO 'foilen_login'@'172.17.0.%' IDENTIFIED BY 'fjGu38d!f';
 _EOF
 
 # Run login service
 docker run \
-	 --rm \
+   --rm \
   --link foilen-login_mariadb:mysql \
-	--volume /tmp/foilen_config.json:/foilen_config.json \
-	--env CONFIG_FILE=/foilen_config.json \
-	--name foilen-login_webapp \
-	--detach \
-	foilen-login:master-SNAPSHOT
+  --volume /tmp/foilen_config.json:/foilen_config.json \
+  --env CONFIG_FILE=/foilen_config.json \
+  --name foilen-login_webapp \
+  --detach \
+  foilen-login:master-SNAPSHOT
 docker logs -f foilen-login_webapp
 
 URL=$(docker inspect foilen-login_webapp | grep '"IPAddress"' | head -n 1 | cut -d '"' -f 4)
@@ -192,33 +192,33 @@ cat > /tmp/foilen_config.json << _EOF
 _EOF
 
 # Run mariadb
-	docker run \
+docker run \
   --rm \
-	--name foilen-login_mariadb \
-	--env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASS \
-	--detach \
-	mariadb:10.2.8
+  --name foilen-login_mariadb \
+  --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASS \
+  --detach \
+  mariadb:10.2.8
 
 # Create database and user
 sleep 20s
 docker run -i \
-	--link foilen-login_mariadb:mysql \
-	--rm \
-	mariadb:10.2.8 \
-	sh -c 'exec mysql -h"$MYSQL_PORT_3306_TCP_ADDR" -P"$MYSQL_PORT_3306_TCP_PORT" -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD"' << _EOF
+  --link foilen-login_mariadb:mysql \
+  --rm \
+  mariadb:10.2.8 \
+  sh -c 'exec mysql -h"$MYSQL_PORT_3306_TCP_ADDR" -P"$MYSQL_PORT_3306_TCP_PORT" -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD"' << _EOF
 CREATE DATABASE foilen_login;
 GRANT ALL ON foilen_login.* TO 'foilen_login'@'172.17.0.%' IDENTIFIED BY 'fjGu38d!f';
 _EOF
 
 # Run login service
 docker run \
-	 --rm \
+   --rm \
   --link foilen-login_mariadb:mysql \
-	--volume /tmp/foilen_config.json:/foilen_config.json \
-	--env CONFIG_FILE=/foilen_config.json \
-	--name foilen-login_webapp \
-	--detach \
-	foilen/foilen-login
+  --volume /tmp/foilen_config.json:/foilen_config.json \
+  --env CONFIG_FILE=/foilen_config.json \
+  --name foilen-login_webapp \
+  --detach \
+  foilen/foilen-login
 docker logs -f foilen-login_webapp
 
 URL=$(docker inspect foilen-login_webapp | grep '"IPAddress"' | head -n 1 | cut -d '"' -f 4)
