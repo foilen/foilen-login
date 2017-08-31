@@ -126,6 +126,7 @@ cat > /tmp/foilen_config.json << _EOF
 _EOF
 
 # Run mariadb
+MYSQL_ROOT_PASS=qwerty
 docker run \
   --rm \
   --name foilen-login_mariadb \
@@ -192,6 +193,7 @@ cat > /tmp/foilen_config.json << _EOF
 _EOF
 
 # Run mariadb
+MYSQL_ROOT_PASS=qwerty
 docker run \
   --rm \
   --name foilen-login_mariadb \
@@ -221,8 +223,8 @@ docker run \
   foilen/foilen-login
 docker logs -f foilen-login_webapp
 
-URL=$(docker inspect foilen-login_webapp | grep '"IPAddress"' | head -n 1 | cut -d '"' -f 4)
-echo Open your browser on http://$URL:14010/
+IP=$(docker inspect foilen-login_webapp | grep '"IPAddress"' | head -n 1 | cut -d '"' -f 4)
+echo Open your browser on http://$IP:14010/
 
 # Stop everything
 docker stop foilen-login_webapp foilen-login_mariadb
