@@ -16,7 +16,7 @@ import org.kohsuke.args4j.Option;
  */
 public class LoginOptions {
 
-    @Option(name = "--debug", usage = "To log everything")
+    @Option(name = "--debug", usage = "To log everything (default: false)")
     public boolean debug;
 
     @Option(name = "--configFile", usage = "The config file path (default: none since using the CONFIG_FILE environment variable)")

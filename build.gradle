@@ -8,7 +8,7 @@ buildscript {
   }
 }
 plugins {
-    id 'org.springframework.boot' version '1.5.6.RELEASE'
+    id 'org.springframework.boot' version '1.5.7.RELEASE'
 }
 
 apply plugin: 'eclipse'
@@ -30,7 +30,7 @@ targetCompatibility = 1.8
 
 dependencyManagement {
   imports {
-    mavenBom 'io.spring.platform:platform-bom:Brussels-SR4'
+    mavenBom 'io.spring.platform:platform-bom:Brussels-SR5'
   }
 }
 
@@ -82,4 +82,4 @@ springBoot {
   mainClass = 'com.foilen.login.LoginApp'
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '3.2.1' }
+task wrapper(type: Wrapper) { gradleVersion = '4.1' }
