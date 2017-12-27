@@ -26,6 +26,7 @@ import com.foilen.login.db.domain.User;
 import com.foilen.login.db.service.LoginService;
 import com.foilen.login.db.service.UserService;
 import com.foilen.smalltools.tools.DateTools;
+import com.foilen.smalltools.tools.SecureRandomTools;
 
 public class InitAdminUser {
 
@@ -56,7 +57,7 @@ public class InitAdminUser {
 
                 // Create a temporary password if it is a new system
                 if (isNewUser) {
-                    user.setUserId("A");
+                    user.setUserId(SecureRandomTools.randomHexString(50));
                     loginService.createAuthWithPassword(administratorEmail, "qwerty", false, DateTools.addDate(new Date(), Calendar.HOUR, 1));
                 }
 
