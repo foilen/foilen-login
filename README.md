@@ -29,6 +29,10 @@ Here is an example of the content:
 
   "fromEmail" : "login@example.com",
   "administratorEmail" : "admin@example.com",
+  "mailHost" : "127.0.0.1",
+  "mailPort" : 25,
+  "mailUsername" : null,
+  "mailPassword" : null,
 
   "loginBaseUrl" : "http://login.example.com"
 }
@@ -44,7 +48,7 @@ You can then specify the full path of that file as the *configFile* argument whe
 # Create database and user
 mysql -u root -p << _EOF
 CREATE DATABASE foilen_login;
-GRANT ALL ON foilen_login.* TO foilen_login@localhost IDENTIFIED BY 'fjGu38d!f';
+GRANT ALL ON foilen_login.* TO foilen_login@'%' IDENTIFIED BY 'fjGu38d!f';
 _EOF
 
 # Prepare the config file
@@ -73,7 +77,7 @@ cat > /tmp/foilen_config.json << _EOF
 _EOF
 
 # Compile
-./gradlew build
+./create-local-release.sh
 
 # Run
 java -jar build/libs/foilen-login-master-SNAPSHOT.jar --configFile /tmp/foilen_config.json

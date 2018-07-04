@@ -9,6 +9,7 @@
  */
 package com.foilen.login;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,6 +21,15 @@ import com.foilen.smalltools.email.EmailServiceSpring;
 @Configuration
 public class MailSpringConfig {
 
+    @Value("${login.mailHost}")
+    private String mailHost;
+    @Value("${login.mailPort}")
+    private int mailPort;
+    @Value("${login.mailUsername:#{null}}")
+    private String mailUsername;
+    @Value("${login.mailPassword:#{null}}")
+    private String mailPassword;
+
     @Bean
     public EmailService emailService() {
         return new EmailServiceSpring();
@@ -28,6 +38,10 @@ public class MailSpringConfig {
     @Bean
     public JavaMailSender mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(mailHost);
+        mailSender.setPort(mailPort);
+        mailSender.setUsername(mailUsername);
+        mailSender.setPassword(mailPassword);
         return mailSender;
     }
 

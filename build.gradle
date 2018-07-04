@@ -70,6 +70,7 @@ dependencies {
   // Misc
   compile "args4j:args4j:$argsVersion"
   compile "commons-validator:commons-validator:$commonsValidatorVersion"
+	compile "com.google.guava:guava:25.1-jre"
 
   // Test
   testCompile 'junit:junit'

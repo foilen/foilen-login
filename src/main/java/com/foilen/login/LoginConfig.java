@@ -9,6 +9,8 @@
  */
 package com.foilen.login;
 
+import javax.annotation.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -31,6 +33,12 @@ public class LoginConfig {
 
     private String fromEmail;
     private String administratorEmail;
+    private String mailHost = "127.0.0.1";
+    private int mailPort = 25;
+    @Nullable
+    private String mailUsername; // Optional
+    @Nullable
+    private String mailPassword; // Optional
 
     private String loginBaseUrl;
 
@@ -68,6 +76,22 @@ public class LoginConfig {
 
     public String getLoginBaseUrl() {
         return loginBaseUrl;
+    }
+
+    public String getMailHost() {
+        return mailHost;
+    }
+
+    public String getMailPassword() {
+        return mailPassword;
+    }
+
+    public int getMailPort() {
+        return mailPort;
+    }
+
+    public String getMailUsername() {
+        return mailUsername;
     }
 
     public String getMysqlDatabaseName() {
@@ -124,6 +148,22 @@ public class LoginConfig {
 
     public void setLoginBaseUrl(String loginBaseUrl) {
         this.loginBaseUrl = loginBaseUrl;
+    }
+
+    public void setMailHost(String mailHost) {
+        this.mailHost = mailHost;
+    }
+
+    public void setMailPassword(String mailPassword) {
+        this.mailPassword = mailPassword;
+    }
+
+    public void setMailPort(int mailPort) {
+        this.mailPort = mailPort;
+    }
+
+    public void setMailUsername(String mailUsername) {
+        this.mailUsername = mailUsername;
     }
 
     public void setMysqlDatabaseName(String mysqlDatabaseName) {

@@ -13,6 +13,8 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.slf4j.Logger;
@@ -35,6 +37,7 @@ import com.foilen.login.service.InitAdminUser;
 import com.foilen.login.service.LoginCookieServiceImpl;
 import com.foilen.login.service.LoginUserEmailServiceImpl;
 import com.foilen.login.service.PasswordHasherServiceImpl;
+import com.foilen.smalltools.reflection.ReflectionTools;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.LogbackTools;
 import com.foilen.smalltools.tools.SecureRandomTools;
@@ -117,8 +120,10 @@ public class LoginApp {
                 String propertyName = propertyDescriptor.getName();
                 Object propertyValue = loginConfigBeanWrapper.getPropertyValue(propertyName);
                 if (propertyValue == null || propertyValue.toString().isEmpty()) {
-                    System.err.println(propertyName + " in the config cannot be null or empty");
-                    System.exit(1);
+                    if (ReflectionTools.findAnnotationByFieldNameAndAnnotation(LoginConfig.class, propertyName, Nullable.class) == null) {
+                        System.err.println(propertyName + " in the config cannot be null or empty");
+                        System.exit(1);
+                    }
                 } else {
                     System.setProperty("login." + propertyName, propertyValue.toString());
                 }
