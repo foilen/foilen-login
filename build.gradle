@@ -3,18 +3,14 @@ buildscript {
     mavenLocal()
     jcenter()
   }
-  dependencies {
-    classpath 'io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE'
-  }
 }
 plugins {
-    id 'org.springframework.boot' version '1.5.7.RELEASE'
+  id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+  id 'org.springframework.boot' version "$springBootVersion"
 }
 
 apply plugin: 'eclipse'
 apply plugin: 'java'
-apply plugin: 'io.spring.dependency-management'
-
 
 group = 'com.foilen'
 version = System.getenv('VERSION')?:'master-SNAPSHOT'
@@ -25,14 +21,8 @@ repositories {
   mavenCentral()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-dependencyManagement {
-  imports {
-    mavenBom 'io.spring.platform:platform-bom:Brussels-SR5'
-  }
-}
+sourceCompatibility = 11
+targetCompatibility = 11
 
 eclipse {
   classpath {
@@ -51,9 +41,9 @@ dependencies {
   compile "org.springframework.boot:spring-boot-starter-data-jpa"
   compile "org.springframework.boot:spring-boot-starter-jdbc"
   
-	// Emails
-	compile 'com.sun.mail:javax.mail'
-	compile 'javax.activation:activation'
+  // Emails
+  compile 'com.sun.mail:javax.mail:1.6.2'
+  compile 'javax.activation:activation'
 
   // Web
   compile "org.springframework.boot:spring-boot-starter-freemarker"
@@ -70,17 +60,30 @@ dependencies {
   // Misc
   compile "args4j:args4j:$argsVersion"
   compile "commons-validator:commons-validator:$commonsValidatorVersion"
-	compile "com.google.guava:guava:25.1-jre"
+  compile "com.google.guava:guava:25.1-jre"
 
   // Test
   testCompile 'junit:junit'
   testCompile "com.h2database:h2"
+  testImplementation "org.junit.jupiter:junit-jupiter-api"
+  testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
+  testCompile 'org.junit.platform:junit-platform-commons'
+  testCompile 'org.junit.platform:junit-platform-engine'
   testCompile "org.springframework:spring-test"
   testCompile "org.springframework.boot:spring-boot-starter-test"
 }
 
-springBoot {
-  mainClass = 'com.foilen.login.LoginApp'
+test {
+  useJUnitPlatform()
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '4.7' }
+
+apply plugin: 'application'
+mainClassName = 'com.foilen.login.LoginApp'
+jar {
+  enabled = true
+}
+
+bootJar {
+ classifier = 'boot'
+}

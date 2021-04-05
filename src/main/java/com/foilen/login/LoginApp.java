@@ -1,7 +1,7 @@
 /*
     Foilen Login
     https://github.com/foilen/foilen-login
-    Copyright (c) 2017-2018 Foilen (http://foilen.com)
+    Copyright (c) 2017-2021 Foilen (http://foilen.com)
 
     The MIT License
     http://opensource.org/licenses/MIT
@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.web.context.support.StandardServletEnvironment;
 
@@ -38,6 +39,7 @@ import com.foilen.login.service.LoginCookieServiceImpl;
 import com.foilen.login.service.LoginUserEmailServiceImpl;
 import com.foilen.login.service.PasswordHasherServiceImpl;
 import com.foilen.smalltools.reflection.ReflectionTools;
+import com.foilen.smalltools.tools.CloseableTools;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.LogbackTools;
 import com.foilen.smalltools.tools.SecureRandomTools;
@@ -137,9 +139,11 @@ public class LoginApp {
                 logger.info("Begin UPGRADE MODE");
                 sources.add(LoginUpgradesSpringConfig.class);
                 sources.add(LoginDbLiveSpringConfig.class);
-                SpringApplication springApplication = new SpringApplication(sources.toArray());
+                SpringApplication springApplication = new SpringApplication(sources.toArray(new Class[sources.size()]));
                 springApplication.setEnvironment(environment);
-                springApplication.run(springBootArgs.toArray(new String[springBootArgs.size()]));
+                ConfigurableApplicationContext context = springApplication.run(springBootArgs.toArray(new String[springBootArgs.size()]));
+                logger.info("Finished UPGRADE MODE. Closing context");
+                CloseableTools.close(context);
                 logger.info("End UPGRADE MODE");
             }
 
@@ -167,7 +171,7 @@ public class LoginApp {
 
             sources.add(LoginCleanExpiredScheduledTask.class);
 
-            SpringApplication springApplication = new SpringApplication(sources.toArray());
+            SpringApplication springApplication = new SpringApplication(sources.toArray(new Class[sources.size()]));
             springApplication.setEnvironment(environment);
             springApplication.run(springBootArgs.toArray(new String[springBootArgs.size()]));
 

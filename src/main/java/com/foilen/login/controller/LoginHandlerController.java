@@ -1,7 +1,7 @@
 /*
     Foilen Login
     https://github.com/foilen/foilen-login
-    Copyright (c) 2017-2018 Foilen (http://foilen.com)
+    Copyright (c) 2017-2021 Foilen (http://foilen.com)
 
     The MIT License
     http://opensource.org/licenses/MIT
@@ -61,7 +61,7 @@ public class LoginHandlerController {
     private EmailValidator emailValidator = EmailValidator.getInstance();
 
     @Value("${login.loginBaseUrl}")
-    String loginBaseUrl;
+    private String loginBaseUrl;
 
     @RequestMapping(value = "createOneTimePassword", method = RequestMethod.POST)
     public View createOneTimePassword(PasswordLoginForm passwordLoginForm, RedirectAttributes redirectAttrs, Locale locale) {

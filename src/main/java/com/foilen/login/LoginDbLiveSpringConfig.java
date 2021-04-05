@@ -1,7 +1,7 @@
 /*
     Foilen Login
     https://github.com/foilen/foilen-login
-    Copyright (c) 2017-2018 Foilen (http://foilen.com)
+    Copyright (c) 2017-2021 Foilen (http://foilen.com)
 
     The MIT License
     http://opensource.org/licenses/MIT
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
+import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 
 @Configuration
 @Profile("PROD")

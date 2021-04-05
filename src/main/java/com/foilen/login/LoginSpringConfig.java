@@ -1,7 +1,7 @@
 /*
     Foilen Login
     https://github.com/foilen/foilen-login
-    Copyright (c) 2017-2018 Foilen (http://foilen.com)
+    Copyright (c) 2017-2021 Foilen (http://foilen.com)
 
     The MIT License
     http://opensource.org/licenses/MIT
@@ -10,7 +10,7 @@
 package com.foilen.login;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -20,12 +20,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceChainRegistration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.CachingResourceResolver;
-import org.springframework.web.servlet.resource.GzipResourceResolver;
+import org.springframework.web.servlet.resource.EncodedResourceResolver;
 import org.springframework.web.servlet.resource.VersionResourceResolver;
 
 import com.foilen.smalltools.spring.resourceresolver.BundleResourceResolver;
@@ -35,7 +34,7 @@ import com.foilen.smalltools.spring.resourceresolver.BundleResourceResolver;
 @EnableScheduling
 @Import(LoginDbLiveSpringConfig.class)
 @PropertySource({ "classpath:/com/foilen/login/application.properties", "classpath:/com/foilen/login/application-${MODE}.properties" })
-public class LoginSpringConfig extends WebMvcConfigurerAdapter {
+public class LoginSpringConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -51,7 +50,7 @@ public class LoginSpringConfig extends WebMvcConfigurerAdapter {
         ResourceChainRegistration chain = registry.addResourceHandler("/bundles/**") //
                 .setCachePeriod(365 * 24 * 60 * 60) //
                 .resourceChain(isProd) //
-                .addResolver(new GzipResourceResolver()); //
+                .addResolver(new EncodedResourceResolver()); //
         if (isProd) {
             chain.addResolver(new CachingResourceResolver(new ConcurrentMapCache("bundles")));
         }
@@ -66,18 +65,13 @@ public class LoginSpringConfig extends WebMvcConfigurerAdapter {
                         .addBundleResource("all.js", "/META-INF/resources/webjars/bootstrap/3.3.7-1/js/bootstrap.js") //
                         .primeCache() //
 
-        );
+                );
 
     }
 
     @Bean
     public AddUserDetailsModelExtension addUserDetailsModelExtension() {
         return new AddUserDetailsModelExtension();
-    }
-
-    @Override
-    public void configurePathMatch(PathMatchConfigurer matcher) {
-        matcher.setUseRegisteredSuffixPatternMatch(true);
     }
 
     @Bean

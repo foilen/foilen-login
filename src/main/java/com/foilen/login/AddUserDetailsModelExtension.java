@@ -1,7 +1,7 @@
 /*
     Foilen Login
     https://github.com/foilen/foilen-login
-    Copyright (c) 2017-2018 Foilen (http://foilen.com)
+    Copyright (c) 2017-2021 Foilen (http://foilen.com)
 
     The MIT License
     http://opensource.org/licenses/MIT
@@ -13,13 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.foilen.login.db.domain.User;
 import com.foilen.login.service.LoginCookieService;
 
-public class AddUserDetailsModelExtension extends HandlerInterceptorAdapter {
+public class AddUserDetailsModelExtension implements AsyncHandlerInterceptor {
 
     @Autowired
     private LoginCookieService loginCookieService;
